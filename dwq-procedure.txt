@@ -1,0 +1,127 @@
+				Assignment2 of LOG8371E
+
+********************************************Docker*************************************
+
+1. fork the code from Github:https://github.com/jguwekarest/jguwekarest.
+2. Download the source code from your own repositories.
+3. Install Docker: 
+	$ sudo apt install docker.io
+4. start Docker:
+	$ sudo systemctl start docker
+	$ sudo systemctl enable docker
+5. Check the status of Docker 
+	$ sudo systemctl status docker
+6. Change into code directory
+	$ cd jguwekarest
+7. Checkout branch 
+	$ git checkout master
+8. Compile the web application archive file with maven($ sudo apt install maven)
+	$ sudo mvn clean package
+9. Build the docker image(OAS3 is the tag of this docker image)
+	$ sudo docker build -t snowdwq/jguweka:OAS3 .
+10. Check images
+	$ sudo docker images
+11. Run the Docker Container
+	$ sudo docker pull mongo 
+	$ sudo docker run --name mongodb -d mongo   
+	$ sudo docker run -p 8080:8080 --link mongodb:mongodb snowdwq/jguweka:OAS3
+	$ firefox http://0.0.0.0:8080
+12. upload the docker image into Docker Hub
+	$ docker login
+	$ docker push snowdwq/jguweka:OAS3
+13. List Docker containers:
+	$ sudo docker ps
+14. Stop a running container
+	$ docker stop <CONTAINER ID>
+15. Stop docker
+	$ sudo systemctl disable docker
+	$ sudo systemctl stop docker
+16. Stop stubon container:
+    	$ sudo docker ps
+   	$ sudo docker exec -it <NAMES> bash 
+   	$ kill 1 
+	$ sudo docker contain rm <CONTAINER ID>
+
+*****************************************JProfiler************************************
+Pre: remove useless containers when you want to repeat the experiment. using step 16 in last section.
+
+1. $ sudo docker container ls
+2. $ sudo docker-compose up
+3. $ sudo docker container ls
+4. $ sudo docker exec -it jguwekarest_jguweka_1  bash 
+
+   input a command line in the terminal: 
+	$  /usr/local/jprofiler10.1.5/bin/jpenable -g -p 8849
+5. $ sudo docker ps
+6. To find the container with this "ports: 0.0.0.0:32768->8849/tcp" and then input 32768 into the jprofiler.
+
+
+
+*****************************************Jmeter**********************************************
+1. Download Jmeter:http://jmeter.apache.org/download_jmeter.cgi
+   and run it:
+	$ cd /home/snow/Downloads/apache-jmeter-5.2/bin/
+	$ sudo ./jmeter
+2. Add Thread Group: 
+	Number of Threads(users): 80
+	Ramp-up period(seconds): 1
+	Loop Count: choose Infinite
+2. Add HTTP Request Defaults, and fill in
+     Basic:
+	Protocol: http 
+	Server Name or IP: 127.0.0.1
+	Port Number: 80
+     Advanced:
+	Implementation: Java
+3. Add HTTP Header Manager:
+	add:
+		Name: Content-Type	Value: multipart/form-data
+		Name: Accept 		Value: application/json
+4. Add HTTP Request:
+	In Basic:
+		Method: POST	Path: /algorithm/BayesNet
+		choose Use multipart/form-data
+		
+		In Files Upload:
+			File Path: /home/snow/jguwekarest/src/test/resources/weather.numeric.normalized.arff
+			Parameter Name: file
+			MIME Type: text/plain
+5. Add View Results Tree
+6. Run and see the result in JProfiler
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
